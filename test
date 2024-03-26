@@ -1,0 +1,150 @@
+ppo_stage1.py -> learning code
+f-run(comm, env, policy, policy_path, action_bound, optimizer)
+  init
+  f-generate_action
+  f-generate_train_data -> memory 
+  f-ppo_update_stage1
+
+ppo.py
+f-generate_action(env, state_list, policy, action_bound) -> all env
+  c-policy(s_list, goal_list, speed_list)
+f-generate_train_data(rewards, gamma, values, last_value, dones, lam)
+  r-targets, advs
+
+net.py
+c-CNNPolicy(msg_action_space, ctr_action_space, frames, n_agent)
+  c-MessageActor
+  c-ControlActor
+  f-forward(x, goal, speed)
+    r-v, action, logprob, mean
+  f-evaluate_action(x, goal, speed, action)
+    r-v, logprob, dist_entropy
+c-MessageActor(frames, msg_action_space, n_agent)
+  f-forward(x, goal, speed)
+    r-action, logprob, mean
+c-ControlActor(msg_action_space, ctr_action_space)
+  f-forward(x)
+    r-action, logprob, mean
+
+ppo.py
+f-ppo_update_stage1(policy, optimizer, batch_size, memory, epoch, coeff_entropy, clip_value, num_stemp, num_env, frames, obs_size, act_size)
+ f-policy.evaluate_action
+ f- 
+
+
+
+data -> 24 * 128 = 3072 = 3 * 1048 -> batchsize ~ 1048, epoch 2
+
+
+this is policy forward function
+('x.shape: ', (1, 4, 3, 512))
+('x.shape: ', (4, 3, 512))
+('a.shape: ', (4, 32, 255))
+('a.shape: ', (4, 32, 128))
+('a.shape: ', (4, 4096))
+('a.shape: ', (4, 256))
+('a.shape: ', (1, 4, 256))
+('goal.shape: ', (4, 2))
+('speed.shape: ', (4, 2))
+('a.shape: ', (1, 4, 256))
+('goal.shape: ', (1, 4, 2))
+('speed.shape: ', (1, 4, 2))
+('a.shape: ', (1, 4, 260))
+('a.shape: ', (1, 4, 128))
+('msg.shape: ', (1, 4, 6))
+('ctr_input.shape: ', (1, 1, 6))
+('ctr_input.shpae: ', (1, 4, 6))
+('ctr_input.shpae: ', (1, 4, 6))
+('ctr_input.shpae: ', (1, 4, 12))
+('x.shape: ', (1, 4, 3, 512))
+('x.shape: ', (4, 3, 512))
+('v.shape: ', (4, 32, 255))
+('v.shape: ', (4, 32, 128))
+('v.shape: ', (4, 4096))
+('v.shape: ', (4, 256))
+('v.shape: ', (1, 4, 256))
+('goal.shape: ', (1, 4, 2))
+('speed.shape: ', (1, 4, 2))
+('v.shape: ', (1, 4, 260))
+('v.shape: ', (1, 4, 128))
+('v.shape: ', (1, 4, 1))
+
+
+
+('sampled_obs.shape: ', (1024, 3, 512))
+('sampled_goals.shape: ', (1024, 2))
+('sampled_speeds.shape: ', (1024, 2))
+('sampled_actions.shape: ', (1024, 2))
+('sampled_logprobs.shape: ', (1024, 1))
+('sampled_targets.shape: ', (1024, 1))
+('sampled_advs.shape: ', (1024, 1))
+('new_value.shape: ', (1024, 1))
+('new_logprob.shape: ', (1024, 1))
+('dist_entropy.shape: ', ())
+('loss.shape: ', ())
+
+('sampled_obs.shape: ', (256, 4, 3, 512))
+('sampled_goals.shape: ', (256, 4, 2))
+('sampled_speeds.shape: ', (256, 4, 2))
+('sampled_actions.shape: ', (256, 4, 2))
+('sampled_logprobs.shape: ', (256, 4, 1))
+('sampled_targets.shape: ', (256, 4, 1))
+('sampled_advs.shape: ', (256, 4, 1))
+('new_value.shape: ', (256, 4, 1))
+('new_logprob.shape: ', (256, 4, 1))
+('dist_entropy.shape: ', ())
+('loss.shape: ', ())
+
+this is ppo_updata1
+('obss.shape: ', (96, 4, 3, 512))
+('goals.shape: ', (96, 4, 2))
+('speeds.shape: ', (96, 4, 2))
+('actions.shape: ', (96, 4, 2))
+('logprobs.shape: ', (96, 4, 1))
+('targets.shape: ', (96, 4, 1))
+('advs.shape: ', (96, 4, 1))
+('sampled_obs.shape:', (32, 4, 3, 512))
+('sampled_goals.shape:', (32, 4, 2))
+('sampled_speeds.shape:', (32, 4, 2))
+('sampled_actions.shape:', (32, 4, 2))
+('sampled_logprobs.shape:', (32, 4, 1))
+('sampled_targets.shape:', (32, 4, 1))
+('sampled_advs.shape:', (32, 4, 1))
+this is policy forward function
+('x.shape: ', (32, 4, 3, 512))
+('x.shape: ', (128, 3, 512))
+('a.shape: ', (128, 32, 255))
+('a.shape: ', (128, 32, 128))
+('a.shape: ', (128, 4096))
+('a.shape: ', (128, 256))
+('a.shape: ', (32, 4, 256))
+('goal.shape: ', (32, 4, 2))
+('speed.shape: ', (32, 4, 2))
+('a.shape: ', (32, 4, 256))
+('goal.shape: ', (32, 4, 2))
+('speed.shape: ', (32, 4, 2))
+('a.shape: ', (32, 4, 260))
+('a.shape: ', (32, 4, 128))
+('msg.shape: ', (32, 4, 6))
+('ctr_input.shape: ', (32, 1, 6))
+('ctr_input.shpae: ', (32, 4, 6))
+('ctr_input.shpae: ', (32, 4, 6))
+('ctr_input.shpae: ', (32, 4, 12))
+('x.shape: ', (32, 4, 3, 512))
+('x.shape: ', (128, 3, 512))
+('v.shape: ', (128, 32, 255))
+('v.shape: ', (128, 32, 128))
+('v.shape: ', (128, 4096))
+('v.shape: ', (128, 256))
+('v.shape: ', (32, 4, 256))
+('goal.shape: ', (32, 4, 2))
+('speed.shape: ', (32, 4, 2))
+('v.shape: ', (32, 4, 260))
+('v.shape: ', (32, 4, 128))
+('v.shape: ', (32, 4, 1))
+('dist_entropy.shape: ', ())
+('new_value.shape: ', (32, 4, 1))
+('new_logprob.shape: ', (32, 4, 1))
+('dist_entropy.shape: ', ())
+update
+
